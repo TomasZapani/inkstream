@@ -56,5 +56,9 @@
 ### Protocolo de mensajes
   <img width="813" height="395" alt="imagen" src="https://github.com/user-attachments/assets/bb262abd-d0cd-4b99-aeb0-5b35e2c1bd4b" />
   
-#### Correr localmente: 
+## Muestra:
+<img width="1914" height="1015" alt="imagen" src="https://github.com/user-attachments/assets/7b6c34ef-6bf7-42cf-be22-7a2d28537eac" />
+
+## Correr localmente: 
 * go run ./cmd/server/main.go
+
