@@ -81,7 +81,7 @@ sequenceDiagram
       B->>H: unregister <- clientB
       H->>H: delete(clients, clientB)
       H->>B: close(send)
-      ```
+```
 ## Muestra:
 <img width="1914" height="1015" alt="imagen" src="https://github.com/user-attachments/assets/7b6c34ef-6bf7-42cf-be22-7a2d28537eac" />
 
