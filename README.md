@@ -55,7 +55,33 @@
 
 ### Protocolo de mensajes
   <img width="813" height="395" alt="imagen" src="https://github.com/user-attachments/assets/bb262abd-d0cd-4b99-aeb0-5b35e2c1bd4b" />
-  
+## Diagrama de Secuencia:
+```mermaid
+sequenceDiagram
+      participant A as Cliente A (ReadPump/WritePump)
+      participant H as Hub (event loop)
+      participant C as Canvas (estado)
+      participant B as Cliente B (ReadPump/WritePump)
+
+      B->>H: register <- clientB
+      H->>C: GetStrokes()
+      C-->>H: []Stroke
+      H->>B: send <- {type: sync, strokes: [...]}
+
+      A->>H: broadcast <- {type: draw, x, y, color, width}
+      H->>C: AddStroke(stroke)
+      H->>A: send <- {type: draw, ...}
+      H->>B: send <- {type: draw, ...}
+
+      A->>H: broadcast <- {type: clear}
+      H->>C: Clear()
+      H->>A: send <- {type: clear}
+      H->>B: send <- {type: clear}
+
+      B->>H: unregister <- clientB
+      H->>H: delete(clients, clientB)
+      H->>B: close(send)
+      ```
 ## Muestra:
 <img width="1914" height="1015" alt="imagen" src="https://github.com/user-attachments/assets/7b6c34ef-6bf7-42cf-be22-7a2d28537eac" />
 
