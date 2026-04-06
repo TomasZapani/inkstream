@@ -57,4 +57,4 @@
   <img width="813" height="395" alt="imagen" src="https://github.com/user-attachments/assets/bb262abd-d0cd-4b99-aeb0-5b35e2c1bd4b" />
   
 #### Correr localmente: 
-go run ./cmd/server/main.go
+* go run ./cmd/server/main.go
