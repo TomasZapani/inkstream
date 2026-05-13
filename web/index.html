@@ -72,10 +72,43 @@
 
         #clearBtn:hover { background: #c0392b; }
 
+        #guessBtn {
+            background: #7c6af7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        #guessBtn:hover { background: #5e4dd6; }
+        #guessBtn:disabled { background: #555; cursor: wait; }
+
         #userCount {
             color: #aaa;
             font-size: 13px;
         }
+
+        #guessToast {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(124, 106, 247, 0.95);
+            color: white;
+            padding: 14px 22px;
+            border-radius: 12px;
+            font-size: 16px;
+            max-width: 70vw;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        #guessToast.show { opacity: 1; }
     </style>
 </head>
 <body>
@@ -87,9 +120,12 @@
         <input type="color" id="colorPicker" value="#ffffff">
         <label>Grosor</label>
         <input type="range" id="brushSize" min="1" max="30" value="4">
+        <button id="guessBtn">¿Qué es esto?</button>
         <button id="clearBtn">Limpiar</button>
         <span id="userCount"></span>
     </div>
+
+    <div id="guessToast"></div>
 
     <script src="app.js"></script>
 </body>

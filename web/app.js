@@ -8,6 +8,8 @@ const cursorCtx = cursorCanvas.getContext('2d');
 const colorPicker = document.getElementById('colorPicker');
 const brushSize = document.getElementById('brushSize');
 const clearBtn = document.getElementById('clearBtn');
+const guessBtn = document.getElementById('guessBtn');
+const guessToast = document.getElementById('guessToast');
 
 // Estado local
 let isDrawing = false;
@@ -54,7 +56,21 @@ function handleMessage(msg) {
         case 'clear':
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             break;
+        case 'guess':
+            showGuessToast(msg.text);
+            break;
     }
+}
+
+// Muestra el resultado de la IA como toast flotante por 6 segundos
+let guessToastTimer = null;
+function showGuessToast(text) {
+    guessToast.textContent = `🤖 ${text}`;
+    guessToast.classList.add('show');
+    if (guessToastTimer) clearTimeout(guessToastTimer);
+    guessToastTimer = setTimeout(() => {
+        guessToast.classList.remove('show');
+    }, 6000);
 }
 
 // Dibuja un segmento en el contexto dado
@@ -127,4 +143,32 @@ canvas.addEventListener('mouseleave', () => { isDrawing = false; });
 clearBtn.addEventListener('click', () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ws.send(JSON.stringify({ type: 'clear' }));
+});
+
+// Botón ¿Qué es esto? — captura el canvas y se lo manda a Claude
+guessBtn.addEventListener('click', async () => {
+    guessBtn.disabled = true;
+    const originalText = guessBtn.textContent;
+    guessBtn.textContent = 'Pensando…';
+    try {
+        // toDataURL devuelve "data:image/png;base64,<...>"; el server tolera el prefijo
+        const dataUrl = canvas.toDataURL('image/png');
+        const base64 = dataUrl.split(',')[1] || dataUrl;
+        const res = await fetch('/guess', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: base64 }),
+        });
+        if (!res.ok) {
+            const errText = await res.text();
+            showGuessToast(`Error: ${errText.trim() || res.status}`);
+        }
+        // Si todo salió bien, el resultado llega por WebSocket vía broadcast
+    } catch (e) {
+        console.error('guess error:', e);
+        showGuessToast('Error de red al consultar a la IA');
+    } finally {
+        guessBtn.textContent = originalText;
+        guessBtn.disabled = false;
+    }
 });
